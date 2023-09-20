@@ -3,24 +3,29 @@ import time
 import requests
 import weather
 
-
+image = 'saber'
+image_text = 'saber'
+state = 'Tasks done...'
+party_size = [1, 2]
+    
 def discord_status():
     start = int(time.time())
     client_id = "1154071316425613312"
     RPC = Presence(client_id)
     RPC.connect()
-    dsize = 10000000000000000000000000000000000000000000000000000000000
+    
+
     while True:
         RPC.update(
-            large_image='saber',
-            large_text='saber',
-            state=f'Dick size - {dsize}',
-            details=f'Temp: {weather.temp}',
-            party_size=[1, 2],
+            large_image=f'{image}',
+            large_text=f'{image_text}',
+            state=f'{state}',
+            details=f'{weather.emoji} {weather.time}',
+            party_size=party_size,
             start=start,
             buttons=[
                 {'label': 'KYS', 'url': 'https://www.google.com'},
-                {'label': 'Discord', 'url': 'https://discord.com'}  # Added a valid URL
+                {'label': 'Discord', 'url': 'https://discord.com'}
             ]
         )
         time.sleep(60)
@@ -28,3 +33,4 @@ def discord_status():
 
 if __name__ == '__main__':
     discord_status()
+    weather.emoji_formatting()

@@ -1,34 +1,68 @@
-# importing library
 import requests
 from bs4 import BeautifulSoup
 
-# enter city name
 city = "Zhytomyr"
+language_code = "en"
 
-# creating url and requests instance
-url = "https://www.google.com/search?q=" + "weather" + city
+url = f'https://www.google.com/search?q=weather+{city}&ie=UTF-8&hl={language_code}'
 html = requests.get(url).content
 
-# getting raw data
 soup = BeautifulSoup(html, 'html.parser')
-temp = soup.find('div', attrs={'class': 'BNeawe iBp4i AP7Wnd'}).text
-str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
 
-# formatting data
-data = str.split('\n')
+temp = soup.find('div', attrs={'class': 'BNeawe iBp4i AP7Wnd'}).text
+data_str = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
+weather_data = soup.find('div', attrs={'class': 'BNeawe tAd8D AP7Wnd'}).text
+
+
+data = data_str.split('\n')
 time = data[0]
-sky = data[1]
+weather_condition = data[1]
+
 
 # getting all div tag
 listdiv = soup.findAll('div', attrs={'class': 'BNeawe s3v9rd AP7Wnd'})
 strd = listdiv[5].text
 
-# getting other required data
 pos = strd.find('Wind')
 other_data = strd[pos:]
 
-# # printing all data
-# print("Temperature is", temp)
-# print("Time: ", time)
-# print("Sky Description: ", sky)
-# print(other_data)
+weather_emojis = {
+    "Partly Sunny": "🌤️",
+    "Scattered Thunderstorms": "⛈️",
+    "Showers": "🌦️",
+    "Scattered Showers": "🌧️",
+    "Rain and Snow": "🌧️❄️",
+    "Overcast": "☁️",
+    "Light Snow": "🌨️",
+    "Freezing Drizzle": "🌧️❄️☔",
+    "Chance of Rain": "🌦️🌧️",
+    "Sunny": "☀️",
+    "Clear": "🌞",
+    "Clear with periodic clouds": "🌤️",
+    "Mostly Sunny": "🌤️",
+    "Partly Cloudy": "⛅",
+    "Mostly Cloudy": "🌥️",
+    "Chance of Storm": "⛈️",
+    "Rain": "🌧️",
+    "Chance of Snow": "❄️🌨️",
+    "Cloudy": "☁️",
+    "Mist": "🌫️",
+    "Storm": "⛈️🌩️",
+    "Thunderstorm": "🌩️⛈️",
+    "Chance of TStorm": "🌦️⛈️",
+    "Sleet": "🌧️❄️",
+    "Snow": "❄️",
+    "Icy": "❄️🌬️",
+    "Dust": "🌫️",
+    "Fog": "🌫️",
+    "Smoke": "🌫️",
+    "Haze": "🌫️",
+    "Flurries": "❄️🌨️",
+    "Light Rain": "🌧️",
+    "Snow Showers": "🌨️🌦️",
+    "Hail": "🌨️⛈️",
+}
+
+emoji = weather_emojis.get(weather_condition, "❓")
+
+print(emoji)
